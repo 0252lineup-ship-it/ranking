@@ -110,15 +110,6 @@ def format_result(rows: list[dict], guild_totals: dict[str, int]) -> str:
     # =========================
     # 전체 랭킹 TOP 20
     # =========================
-    lines.append("[전체 랭킹 TOP 20]")
-    lines.append("")
-
-    top20 = sorted(rows, key=lambda x: x["stars"], reverse=True)[:20]
-    for i, row in enumerate(top20, 1):
-        lines.append(f"{i}. {row['nick']} / {row['stars']:,}개 / {row['guild']}")
-
-    lines.append("")
-    lines.append("")
     lines.append("[전체 랭킹 (닉네임 / 개수 / 길드)]")
     lines.append("")
     for row in sorted(rows, key=lambda row: row["stars"], reverse=True):
@@ -181,8 +172,6 @@ def format_html(rows: list[dict], guild_totals: dict[str, int]) -> str:
             <footer>길드 합계 {guild_total:,}개</footer>
         </section>
         """)
-
-    top20 = sorted(rows, key=lambda r: r["stars"], reverse=True)[:20]
 
     def ranking_block(items):
         parts = []
@@ -249,9 +238,7 @@ summary strong{{color:#fbbf24}}
 <section class="guild-grid">{''.join(guild_cards)}</section>
 <section class="main">
 <div class="details">{''.join(detail_cards)}</div>
-<div class="side">
-<section class="rank-card"><h2>전체 랭킹 TOP 20</h2>{ranking_block(top20)}</section>
-</div>
+
 </section>
 </div>
 </body>
