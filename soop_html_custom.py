@@ -209,16 +209,16 @@ h1{{text-align:center;font-size:42px;margin:0}}
 .bar{{height:8px;background:#293241;border-radius:99px;overflow:hidden;margin-top:14px}}
 .bar span{{display:block;height:100%;background:var(--c)}}
 .diff{{font-size:12px;color:#94a3b8;margin-top:8px}}
-.main{{display:grid;grid-template-columns:2fr 1fr;gap:18px}}
-.details{{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}}
+.main{{display:block}}
+.details{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
 .detail,.rank-card{{background:#111827;border:1px solid #273041;border-radius:16px;overflow:hidden}}
-.detail header{{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;border-bottom:1px solid #273041}}
-.detail header img{{width:44px;height:44px;object-fit:contain}}
-.detail h2{{color:var(--c);margin:0}}
-.member{{display:grid;grid-template-columns:24px 1fr auto;gap:8px;padding:9px 12px;border-bottom:1px solid #1f2937}}
+.detail header{{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;border-bottom:1px solid #273041}}
+.detail header img{{width:54px;height:54px;object-fit:contain}}
+.detail h2{{color:var(--c);margin:0;font-size:24px}}
+.member{{display:grid;grid-template-columns:28px 1fr auto;gap:10px;padding:11px 16px;border-bottom:1px solid #1f2937;font-size:16px}}
 .member span{{color:var(--c);font-weight:700}}
 .member em,.ranking-row em{{font-style:normal;font-weight:800}}
-.detail footer{{padding:12px;text-align:center;color:var(--c);font-weight:800}}
+.detail footer{{padding:14px;text-align:center;color:var(--c);font-weight:800;font-size:16px}}
 .rank-card h2 h2{{margin:0;padding:15px;border-bottom:1px solid #273041}}
 .ranking-row{{display:grid;grid-template-columns:28px 1fr 70px auto;gap:8px;padding:10px 12px;border-bottom:1px solid #1f2937}}
 .ranking-row span{{color:#fbbf24;font-weight:800}}
@@ -226,8 +226,8 @@ h1{{text-align:center;font-size:42px;margin:0}}
 .ranking-row em{{color:#fde68a}}
 .side{{display:grid;gap:16px}}
 summary strong{{color:#fbbf24}}
-@media(max-width:1200px){{.guild-grid{{grid-template-columns:repeat(3,1fr)}}.main{{grid-template-columns:1fr}}}}
-@media(max-width:800px){{.details{{grid-template-columns:1fr}}.mission-grid{{grid-template-columns:1fr}}}}
+@media(max-width:1200px){{.guild-grid{{grid-template-columns:repeat(3,1fr)}}.details{{grid-template-columns:repeat(2,1fr)}}}}
+@media(max-width:800px){{.details{{grid-template-columns:1fr}}}}
 </style>
 </head>
 <body>
