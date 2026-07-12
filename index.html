@@ -25,16 +25,16 @@ h1{text-align:center;font-size:42px;margin:0}
 .bar{height:8px;background:#293241;border-radius:99px;overflow:hidden;margin-top:14px}
 .bar span{display:block;height:100%;background:var(--c)}
 .diff{font-size:12px;color:#94a3b8;margin-top:8px}
-.main{display:grid;grid-template-columns:2fr 1fr;gap:18px}
-.details{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.main{display:block}
+.details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .detail,.rank-card{background:#111827;border:1px solid #273041;border-radius:16px;overflow:hidden}
-.detail header{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;border-bottom:1px solid #273041}
-.detail header img{width:44px;height:44px;object-fit:contain}
-.detail h2{color:var(--c);margin:0}
-.member{display:grid;grid-template-columns:24px 1fr auto;gap:8px;padding:9px 12px;border-bottom:1px solid #1f2937}
+.detail header{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;border-bottom:1px solid #273041}
+.detail header img{width:54px;height:54px;object-fit:contain}
+.detail h2{color:var(--c);margin:0;font-size:24px}
+.member{display:grid;grid-template-columns:28px 1fr auto;gap:10px;padding:11px 16px;border-bottom:1px solid #1f2937;font-size:16px}
 .member span{color:var(--c);font-weight:700}
 .member em,.ranking-row em{font-style:normal;font-weight:800}
-.detail footer{padding:12px;text-align:center;color:var(--c);font-weight:800}
+.detail footer{padding:14px;text-align:center;color:var(--c);font-weight:800;font-size:16px}
 .rank-card h2 h2{margin:0;padding:15px;border-bottom:1px solid #273041}
 .ranking-row{display:grid;grid-template-columns:28px 1fr 70px auto;gap:8px;padding:10px 12px;border-bottom:1px solid #1f2937}
 .ranking-row span{color:#fbbf24;font-weight:800}
@@ -42,15 +42,15 @@ h1{text-align:center;font-size:42px;margin:0}
 .ranking-row em{color:#fde68a}
 .side{display:grid;gap:16px}
 summary strong{color:#fbbf24}
-@media(max-width:1200px){.guild-grid{grid-template-columns:repeat(3,1fr)}.main{grid-template-columns:1fr}}
-@media(max-width:800px){.details{grid-template-columns:1fr}.mission-grid{grid-template-columns:1fr}}
+@media(max-width:1200px){.guild-grid{grid-template-columns:repeat(3,1fr)}.details{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:800px){.details{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <div class="title-row"><img src="총겜동.png" alt="총겜동 로고" onerror="this.style.display='none'"><h1>총겜동 내수서버 도시락 현황</h1></div>
-<div class="update-time">마지막 업데이트: 2026-07-13 04:09:18 (KST) · ※ 30분마다 자동 집계됩니다.</div>
-<section class="total"><span>전체 도시락 합계</span><strong>14,225,214개</strong></section>
+<div class="update-time">마지막 업데이트: 2026-07-13 04:16:42 (KST) · ※ 30분마다 자동 집계됩니다.</div>
+<section class="total"><span>전체 도시락 합계</span><strong>14,227,114개</strong></section>
 <section class="guild-grid">
         <div class="guild-card" style="--c:#ef4444">
             <div class="rank">1위</div>
@@ -64,8 +64,8 @@ summary strong{color:#fbbf24}
             <div class="rank">2위</div>
             <img src="logos/아랑.png" alt="아랑" onerror="this.style.display='none'">
             <div class="guild">아랑</div>
-            <div class="count">3,410,013개</div>
-            <div class="bar"><span style="width:72.2%"></span></div>
+            <div class="count">3,411,913개</div>
+            <div class="bar"><span style="width:72.3%"></span></div>
         </div>
         
         <div class="guild-card" style="--c:#a855f7">
@@ -116,8 +116,8 @@ summary strong{color:#fbbf24}
         
         <section class="detail" style="--c:#facc15">
             <header><img src="logos/아랑.png" alt="아랑" onerror="this.style.display='none'"><h2>아랑</h2></header>
-            <div class="member"><span>1</span><b>오아</b><em>768,000개</em></div><div class="member"><span>2</span><b>나비</b><em>514,272개</em></div><div class="member"><span>3</span><b>진호</b><em>437,400개</em></div><div class="member"><span>4</span><b>너보링</b><em>275,510개</em></div><div class="member"><span>5</span><b>모요</b><em>258,200개</em></div><div class="member"><span>6</span><b>호미밍</b><em>238,868개</em></div><div class="member"><span>7</span><b>키이세</b><em>200,409개</em></div><div class="member"><span>8</span><b>유키</b><em>177,841개</em></div><div class="member"><span>9</span><b>피치</b><em>160,520개</em></div><div class="member"><span>10</span><b>쨈도은</b><em>145,501개</em></div><div class="member"><span>11</span><b>설빈달</b><em>144,762개</em></div><div class="member"><span>12</span><b>루디딕</b><em>88,730개</em></div>
-            <footer>길드 합계 3,410,013개</footer>
+            <div class="member"><span>1</span><b>오아</b><em>768,000개</em></div><div class="member"><span>2</span><b>나비</b><em>514,272개</em></div><div class="member"><span>3</span><b>진호</b><em>437,800개</em></div><div class="member"><span>4</span><b>너보링</b><em>275,510개</em></div><div class="member"><span>5</span><b>모요</b><em>258,200개</em></div><div class="member"><span>6</span><b>호미밍</b><em>238,868개</em></div><div class="member"><span>7</span><b>키이세</b><em>200,409개</em></div><div class="member"><span>8</span><b>유키</b><em>177,841개</em></div><div class="member"><span>9</span><b>피치</b><em>161,520개</em></div><div class="member"><span>10</span><b>쨈도은</b><em>145,501개</em></div><div class="member"><span>11</span><b>설빈달</b><em>144,762개</em></div><div class="member"><span>12</span><b>루디딕</b><em>89,230개</em></div>
+            <footer>길드 합계 3,411,913개</footer>
         </section>
         
         <section class="detail" style="--c:#38bdf8">
