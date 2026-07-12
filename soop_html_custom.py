@@ -244,7 +244,8 @@ summary strong{{color:#fbbf24}}
 <body>
 <div class="wrap">
 <div class="title-row"><img src="총겜동.png" alt="총겜동 로고" onerror="this.style.display='none'"><h1>총겜동 내수서버 도시락 현황</h1></div>
-<div class="update-time">마지막 업데이트: {updated_at} (KST) · 5분마다 자동 새로고침</div>
+<div class="update-time">마지막 업데이트: {updated_at} (KST) · 마지막 업데이트: {updated_at} (KST)
+※ 30분마다 자동 집계됩니다.</div>
 <section class="total"><span>전체 도시락 합계</span><strong>{total_all:,}개</strong></section>
 <section class="guild-grid">{''.join(guild_cards)}</section>
 <section class="main">
