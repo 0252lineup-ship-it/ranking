@@ -85,8 +85,7 @@ def format_result(rows: list[dict], guild_totals: dict[str, int]) -> str:
         if rank == 1:
             lines.append(f"{rank}위. {guild} : {total:,}개")
         else:
-            diff = leader_total - total
-            lines.append(f"{rank}위. {guild} : {total:,}개 (-{diff:,}개)")
+            lines.append(f"{rank}위. {guild} : {total:,}개")
 
 
     lines.append("")
@@ -103,61 +102,30 @@ def format_result(rows: list[dict], guild_totals: dict[str, int]) -> str:
             key=lambda row: row["stars"],
             reverse=True,
         )
-        guild_total = guild_totals[guild]
         for rank, row in enumerate(guild_rows, 1):
-            percent = row["stars"] / guild_total * 100 if guild_total else 0
-            lines.append(f'{rank}. {row["nick"]} / {row["stars"]:,}개 / {percent:.1f}%')
+            lines.append(f'{rank}. {row["nick"]} / {row["stars"]:,}개')
 
     lines.append("")
     lines.append("")
     # =========================
-    # 전체 랭킹 TOP 10
+    # 전체 랭킹 TOP 20
     # =========================
-    lines.append("[전체 랭킹 TOP 10]")
+    lines.append("[전체 랭킹 TOP 20]")
     lines.append("")
 
-    top10 = sorted(rows, key=lambda x: x["stars"], reverse=True)[:10]
-    for i, row in enumerate(top10, 1):
+    top20 = sorted(rows, key=lambda x: x["stars"], reverse=True)[:20]
+    for i, row in enumerate(top20, 1):
         lines.append(f"{i}. {row['nick']} / {row['stars']:,}개 / {row['guild']}")
 
     lines.append("")
-    # =========================
-    # 전체 랭킹 BOTTOM 10
-    # =========================
-    lines.append("[전체 랭킹 BOTTOM 10]")
     lines.append("")
-
-    bottom10 = sorted(rows, key=lambda x: x["stars"])[:10]
-    for i, row in enumerate(bottom10, 1):
-        lines.append(f"{i}. {row['nick']} / {row['stars']:,}개 / {row['guild']}")
-
-    lines.append("")
-    lines.append("[전체 랭킹 (닉네임 / 별풍선 / 길드 / 비율)]")
+    lines.append("[전체 랭킹 (닉네임 / 개수 / 길드)]")
     lines.append("")
     for row in sorted(rows, key=lambda row: row["stars"], reverse=True):
-        guild_total = guild_totals[row["guild"]]
-        percent = row["stars"] / guild_total * 100 if guild_total else 0
         lines.append(
-            f'{row["nick"]} / {row["stars"]:,}개 / '
-            f'{row["guild"]} / {percent:.1f}%'
+            f'{row["nick"]} / {row["stars"]:,}개 / {row["guild"]}'
         )
 
-    lines.append("")
-    lines.append("")
-    lines.append("[현재 PROGRESS 미션 상세]")
-    lines.append("")
-    for row in sorted(rows, key=lambda row: (row["guild"], -row["stars"])):
-        lines.append(f'[{row["guild"]} / {row["nick"]}]')
-        if not row["missions"]:
-            lines.append("진행 중 미션 없음")
-        else:
-            for mission in row["missions"]:
-                lines.append(
-                    f'- {mission["title"]} / '
-                    f'{mission["balloon_cnt"]:,}개 / '
-                    f'idx={mission["idx"]}'
-                )
-        lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
 
@@ -172,17 +140,15 @@ def format_html(rows: list[dict], guild_totals: dict[str, int]) -> str:
 
     colors = {
         "태산": "#ef4444",
-        "아랑": "#22c55e",
-        "만월": "#3b82f6",
-        "천박": "#a855f7",
-        "도황": "#eab308",
-        "하북펭가": "#06b6d4",
+        "만월": "#a855f7",
+        "아랑": "#facc15",
+        "천박": "#38bdf8",
+        "도황": "#f472b6",
+        "하북펭가": "#3b82f6",
     }
 
     guild_cards = []
     for rank, (guild, total) in enumerate(sorted_guilds, 1):
-        diff = max_total - total
-        diff_text = "현재 1위" if rank == 1 else f"1위와 {diff:,}개 차이"
         width = total / max_total * 100 if max_total else 0
         guild_cards.append(f"""
         <div class="guild-card" style="--c:{colors[guild]}">
@@ -191,7 +157,6 @@ def format_html(rows: list[dict], guild_totals: dict[str, int]) -> str:
             <div class="guild">{guild}</div>
             <div class="count">{total:,}개</div>
             <div class="bar"><span style="width:{width:.1f}%"></span></div>
-            <div class="diff">{diff_text}</div>
         </div>
         """)
 
@@ -205,10 +170,9 @@ def format_html(rows: list[dict], guild_totals: dict[str, int]) -> str:
         )
         member_rows = []
         for rank, row in enumerate(guild_rows, 1):
-            pct = row["stars"] / guild_total * 100 if guild_total else 0
             member_rows.append(
                 f'<div class="member"><span>{rank}</span><b>{html.escape(row["nick"])}</b>'
-                f'<em>{row["stars"]:,}개</em><small>{pct:.1f}%</small></div>'
+                f'<em>{row["stars"]:,}개</em></div>'
             )
         detail_cards.append(f"""
         <section class="detail" style="--c:{colors[guild]}">
@@ -218,8 +182,7 @@ def format_html(rows: list[dict], guild_totals: dict[str, int]) -> str:
         </section>
         """)
 
-    top10 = sorted(rows, key=lambda r: r["stars"], reverse=True)[:10]
-    bottom10 = sorted(rows, key=lambda r: r["stars"])[:10]
+    top20 = sorted(rows, key=lambda r: r["stars"], reverse=True)[:20]
 
     def ranking_block(items):
         parts = []
@@ -229,20 +192,6 @@ def format_html(rows: list[dict], guild_totals: dict[str, int]) -> str:
                 f'<small>{row["guild"]}</small><em>{row["stars"]:,}개</em></div>'
             )
         return "".join(parts)
-
-    mission_blocks = []
-    for row in sorted(rows, key=lambda r: (r["guild"], -r["stars"])):
-        missions = []
-        for m in row["missions"]:
-            missions.append(
-                f'<li><span>{html.escape(m["title"])}</span><b>{m["balloon_cnt"]:,}개</b></li>'
-            )
-        if not missions:
-            missions.append('<li class="empty">진행 중 미션 없음</li>')
-        mission_blocks.append(
-            f'<details><summary>{row["guild"]} · {html.escape(row["nick"])}'
-            f'<strong>{row["stars"]:,}개</strong></summary><ul>{"".join(missions)}</ul></details>'
-        )
 
     return f"""<!DOCTYPE html>
 <html lang="ko">
@@ -255,8 +204,10 @@ def format_html(rows: list[dict], guild_totals: dict[str, int]) -> str:
 *{{box-sizing:border-box}}
 body{{margin:0;background:#080b12;color:#f8fafc;font-family:"Malgun Gothic",sans-serif}}
 .wrap{{width:min(1500px,96%);margin:auto;padding:32px 0 70px}}
-h1{{text-align:center;font-size:42px;margin:0 0 8px}}
-.update-time{{text-align:center;color:#94a3b8;font-size:14px;margin-bottom:24px}}
+.title-row{{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:24px}}
+.title-row img{{width:86px;height:auto;object-fit:contain}}
+h1{{text-align:center;font-size:42px;margin:0}}
+.update-time{{text-align:center;color:#94a3b8;font-size:14px;margin:-12px 0 24px}}
 .total{{text-align:center;padding:24px;border:1px solid #7c3aed;border-radius:18px;background:#111827;margin-bottom:24px}}
 .total span{{display:block;color:#c4b5fd}}
 .total strong{{font-size:48px;color:#c084fc}}
@@ -271,47 +222,37 @@ h1{{text-align:center;font-size:42px;margin:0 0 8px}}
 .diff{{font-size:12px;color:#94a3b8;margin-top:8px}}
 .main{{display:grid;grid-template-columns:2fr 1fr;gap:18px}}
 .details{{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}}
-.detail,.rank-card,.missions{{background:#111827;border:1px solid #273041;border-radius:16px;overflow:hidden}}
+.detail,.rank-card{{background:#111827;border:1px solid #273041;border-radius:16px;overflow:hidden}}
 .detail header{{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;border-bottom:1px solid #273041}}
 .detail header img{{width:44px;height:44px;object-fit:contain}}
 .detail h2{{color:var(--c);margin:0}}
-.member{{display:grid;grid-template-columns:24px 1fr auto 52px;gap:8px;padding:9px 12px;border-bottom:1px solid #1f2937}}
-.member span,.member small{{color:var(--c);font-weight:700}}
+.member{{display:grid;grid-template-columns:24px 1fr auto;gap:8px;padding:9px 12px;border-bottom:1px solid #1f2937}}
+.member span{{color:var(--c);font-weight:700}}
 .member em,.ranking-row em{{font-style:normal;font-weight:800}}
 .detail footer{{padding:12px;text-align:center;color:var(--c);font-weight:800}}
-.rank-card h2,.missions h2{{margin:0;padding:15px;border-bottom:1px solid #273041}}
+.rank-card h2 h2{{margin:0;padding:15px;border-bottom:1px solid #273041}}
 .ranking-row{{display:grid;grid-template-columns:28px 1fr 70px auto;gap:8px;padding:10px 12px;border-bottom:1px solid #1f2937}}
 .ranking-row span{{color:#fbbf24;font-weight:800}}
 .ranking-row small{{color:#94a3b8}}
 .ranking-row em{{color:#fde68a}}
 .side{{display:grid;gap:16px}}
-.missions{{margin-top:22px;padding-bottom:12px}}
-.mission-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;padding:12px}}
-details{{border:1px solid #273041;border-radius:10px;background:#0f172a}}
-summary{{display:flex;justify-content:space-between;padding:10px;cursor:pointer;font-weight:700}}
 summary strong{{color:#fbbf24}}
-ul{{margin:0;padding:0 15px 12px 28px}}
-li{{margin-top:7px}}
-li b{{float:right}}
-.empty{{color:#64748b}}
 @media(max-width:1200px){{.guild-grid{{grid-template-columns:repeat(3,1fr)}}.main{{grid-template-columns:1fr}}}}
 @media(max-width:800px){{.details{{grid-template-columns:1fr}}.mission-grid{{grid-template-columns:1fr}}}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>총겜동 내수서버 도시락 현황</h1>
+<div class="title-row"><img src="총겜동.png" alt="총겜동 로고" onerror="this.style.display='none'"><h1>총겜동 내수서버 도시락 현황</h1></div>
 <div class="update-time">마지막 업데이트: {updated_at} (KST) · 5분마다 자동 새로고침</div>
 <section class="total"><span>전체 도시락 합계</span><strong>{total_all:,}개</strong></section>
 <section class="guild-grid">{''.join(guild_cards)}</section>
 <section class="main">
 <div class="details">{''.join(detail_cards)}</div>
 <div class="side">
-<section class="rank-card"><h2>전체 랭킹 TOP 10</h2>{ranking_block(top10)}</section>
-<section class="rank-card"><h2>전체 랭킹 BOTTOM 10</h2>{ranking_block(bottom10)}</section>
+<section class="rank-card"><h2>전체 랭킹 TOP 20</h2>{ranking_block(top20)}</section>
 </div>
 </section>
-<section class="missions"><h2>현재 진행 중 미션 상세</h2><div class="mission-grid">{''.join(mission_blocks)}</div></section>
 </div>
 </body>
 </html>"""
