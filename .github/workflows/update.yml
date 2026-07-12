@@ -1,0 +1,42 @@
+name: 도시락 자동 업데이트
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 * * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - run: python soop_html_custom.py
+
+      - run: |
+          mkdir site
+          cp result.html site/index.html
+          cp 총겜동.png site/
+          cp -r logos site/
+          touch site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - uses: actions/deploy-pages@v4
