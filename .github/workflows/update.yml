@@ -1,1 +1,71 @@
+name: 도시락 자동 업데이트
 
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7,37 * * * *"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 저장소 파일 불러오기
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 필요한 모듈 설치
+        run: pip install -r requirements.txt
+
+      - name: 도시락 집계 실행
+        env:
+          CI: "true"
+        run: python soop_html_custom.py
+
+      - name: Cloudflare용 index.html 만들기
+        run: cp result.html index.html
+
+      - name: index.html 저장소에 업데이트
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "자동 집계 업데이트"
+          git push
+
+      - name: GitHub Pages용 파일 구성
+        run: |
+          mkdir -p site
+          cp result.html site/index.html
+          cp 총겜동.png site/총겜동.png
+          cp -r logos site/logos
+          touch site/.nojekyll
+
+      - name: GitHub Pages 설정
+        uses: actions/configure-pages@v5
+
+      - name: Pages 파일 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: GitHub Pages 배포
+        id: deployment
+        uses: actions/deploy-pages@v4
