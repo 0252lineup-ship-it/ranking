@@ -15,7 +15,7 @@ GUILDS = {
         ("킴성태", "rrvv17"), ("라로시", "larothy"), ("태민98", "damin0714"),
         ("클로이", "vf3366"), ("나나문", "nanamoon777"), ("채윤아", "yuna812"),
         ("깐숙", "nangnan"), ("견자희", "gyeonjahee"), ("백청미", "wtcheongmi"),
-        ("하루아이", "loveya4860"), ("김뱅글", "happyness192"), ("김진아", "ase7129"),
+        ("구월이", "isq1158"), ("김뱅글", "happyness192"), ("김진아", "ase7129"),
     ],
     "만월": [
         ("강만식", "rkdakstlr911"), ("마왕루야", "maoruyakr"), ("떵규", "sunglim001"),
